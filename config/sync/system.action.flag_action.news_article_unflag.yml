@@ -1,0 +1,15 @@
+uuid: f103bad6-cbd3-4ee1-a02e-953aa9c1a894
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.news_article
+  module:
+    - flag
+id: flag_action.news_article_unflag
+label: 'Remove from favourites'
+type: node
+plugin: 'flag_action:news_article_unflag'
+configuration:
+  flag_id: news_article
+  flag_action: unflag

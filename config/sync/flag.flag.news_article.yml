@@ -1,0 +1,30 @@
+uuid: 280733dd-96e9-44b8-8f3e-034d02b38023
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: news_article
+label: 'News Article'
+bundles:
+  - article
+entity_type: node
+global: false
+weight: 0
+flag_short: 'Add to favourites'
+flag_long: ''
+flag_message: ''
+unflag_short: 'Remove from favourites'
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+flag_type: 'entity:node'
+link_type: reload
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig: {  }

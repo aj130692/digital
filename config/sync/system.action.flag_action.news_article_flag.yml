@@ -1,0 +1,15 @@
+uuid: 344e164c-e9ab-468a-a9f8-b6f0a9724372
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.news_article
+  module:
+    - flag
+id: flag_action.news_article_flag
+label: 'Add to favourites'
+type: node
+plugin: 'flag_action:news_article_flag'
+configuration:
+  flag_id: news_article
+  flag_action: flag
