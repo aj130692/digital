@@ -5,7 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - node.type.article
-    - user.role.authenticated
+    - views.view.archive
   module:
     - node
     - user
@@ -25,10 +25,9 @@ display:
     position: 0
     display_options:
       access:
-        type: role
+        type: perm
         options:
-          role:
-            authenticated: authenticated
+          perm: 'access content'
       cache:
         type: tag
         options: {  }
@@ -174,7 +173,18 @@ display:
             label: ''
           granularity: second
       title: 'All News'
-      header: {  }
+      header:
+        view:
+          id: view
+          table: views
+          field: view
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          view_to_insert: 'archive:block_1'
+          inherit_arguments: false
+          plugin_id: view
       footer: {  }
       empty: {  }
       relationships: {  }
@@ -188,7 +198,7 @@ display:
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
+        - user.permissions
       tags: {  }
   page_1:
     display_plugin: page
@@ -205,5 +215,5 @@ display:
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
+        - user.permissions
       tags: {  }

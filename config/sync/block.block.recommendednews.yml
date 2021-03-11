@@ -1,0 +1,20 @@
+uuid: a0fe9586-937a-4f76-affb-db120906ad7c
+langcode: en
+status: true
+dependencies:
+  module:
+    - digital
+  theme:
+    - bartik
+id: recommendednews
+theme: bartik
+region: content
+weight: 0
+provider: null
+plugin: random_recommended_news
+settings:
+  id: random_recommended_news
+  label: 'Recommended News'
+  provider: digital
+  label_display: visible
+visibility: {  }

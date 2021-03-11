@@ -211,6 +211,7 @@ display:
         options: {  }
       defaults:
         arguments: false
+        pager: false
       arguments:
         created_year_month:
           id: created_year_month
@@ -247,11 +248,14 @@ display:
           entity_type: node
           plugin_id: date_year_month
       display_extenders: {  }
+      pager:
+        type: none
+        options:
+          offset: 0
     cache_metadata:
       contexts:
         - 'languages:language_interface'
         - url
-        - url.query_args
         - 'user.node_grants:view'
         - user.permissions
       max-age: -1
@@ -267,6 +271,24 @@ display:
         options: {  }
       path: archive
       display_extenders: {  }
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          granularity: second
+          plugin_id: date
+          entity_type: node
+          entity_field: created
+      defaults:
+        sorts: false
     cache_metadata:
       contexts:
         - 'languages:language_interface'
