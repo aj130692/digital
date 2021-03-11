@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * Implements hook_cron().
+ * Cron job to send email latest 3 recommended news for all users.
+ */
+function digital_cron() {
+  $database = \Drupal::database();
+  $query = $database->select("node_field_data", "nfd");
+  $query->fields("nfd", ["nid", "title"]);
+  $query->condition("status", 1);
+  $query->orderBy("created", "DESC");
+  $query->range(0, 3);
+  $nids = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+  // Check for node exists.
+  if ($nids) {
+    // Load all user emails.
+    $userquery = $database->select("users_field_data", "ufd");
+    $userquery->addField("ufd", "mail", "email");
+    $userquery->condition("status", 1);
+    $uids = $userquery->execute()->fetchAll(\PDO::FETCH_ASSOC);
+    if ($uids) {
+      $user_emails_array = [];
+      foreach ($uids as $uid) {
+        if (isset($uid['email'])) {
+          $user_emails_array[] = $uid['email'];
+        }
+      }
+      if ($user_emails_array) {
+        global $base_url;
+        $user_emails = implode(",", $user_emails_array);
+        $email_body = '<div>';
+        foreach ($nids as $node_data) {
+          $nid = $node_data['nid'];
+          $title = $node_data['title'];
+          $email_body .= "<div><a href='$base_url/node/$nid'>$title</a></div>";
+        }
+        $email_body .= '</div>';
+        $mailManager = \Drupal::service('plugin.manager.mail');
+        $module = 'digital';
+        $key = 'article_email';
+        $to = \Drupal::currentUser()->getEmail();
+        $params['message'] = $email_body;
+        $params['Bcc'] = $user_emails;
+        $langcode = \Drupal::currentUser()->getPreferredLangcode();
+        $send = TRUE;
+        $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+        if ($result['result'] !== TRUE) {
+          \Drupal::logger("Email Trigger")
+            ->notice(t('There was a problem sending your message and it was not sent.'));
+        }
+        else {
+          \Drupal::logger("Email Trigger")
+            ->notice("Email triggered successfully");
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function digital_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'article_email':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('News Letter');
+      $message['body'][] = $params['message'];
+      $message['headers']['Bcc'] = $params['Bcc'];
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function digital_theme($existing, $type, $theme, $path) {
+  return [
+    'recommendednews' => [
+      'variables' => ['data' => NULL],
+    ],
+  ];
+}

@@ -1,0 +1,10 @@
+<div class="row">
+  {% for data_value in data %}
+    <div class="column" style="float: left; width: 28%; padding: 10px">
+      <a href="{{ data_value.url }}">
+        <div><img src="{{ data_value.image }}"></div>
+        {{ data_value.title }}
+      </a>
+    </div>
+  {% endfor %}
+</div>
